@@ -27,6 +27,7 @@ body {
     height: 100vh;
     position: fixed;
     padding-top: 20px;
+    overflow-y: auto;
 }
 
 .sidebar ul {
@@ -68,6 +69,9 @@ body {
 .btn {
     border-radius: 8px;
     font-weight: bold;
+}
+.nav-item i{
+    padding-right: 10px;
 }
 
     </style>
@@ -111,6 +115,50 @@ body {
         <i class="bi bi-globe"></i> Manage Employee IPs
     </a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" data-bs-toggle="collapse" href="#leavesMenu" role="button" aria-expanded="<?= ($current_page == 'manage_leaves.php' || $current_page == 'manage_leave_requests.php' || $current_page == 'employee_leaves_report.php') ? 'true' : 'false'; ?>" aria-controls="leavesMenu">
+        <i class="bi bi-calendar"></i> Leaves
+        <i class="bi bi-chevron-down"></i>
+    </a>
+    <div class="collapse <?= ($current_page == 'manage_leaves.php' || $current_page == 'manage_leave_requests.php' || $current_page == 'employee_leaves_report.php') ? 'show' : ''; ?>" id="leavesMenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="nav-link <?= ($current_page == 'manage_leaves.php') ? 'active' : '' ?>" href="manage_leaves.php">
+                    <i class="bi bi-calendar-check"></i> Manage Leaves
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= ($current_page == 'manage_leave_requests.php') ? 'active' : '' ?>" href="manage_leave_requests.php">
+                    <i class="bi bi-calendar-check"></i> Leave Requests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= ($current_page == 'employee_leaves_report.php') ? 'active' : '' ?>" href="employee_leaves_report.php">
+                    <i class="bi bi-calendar-check"></i> Employee Leaves
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+
+<!-- <li class="nav-item">
+            <a class="nav-link <?= ($current_page == 'manage_leaves.php') ? 'active' : '' ?>" href="manage_leaves.php">
+                <i class="bi bi-calendar-check"></i> Manage Leaves
+            </a>
+        </li>
+        <li class="nav-item">
+    <a class="nav-link <?= ($current_page == 'manage_leave_requests.php') ? 'active' : '' ?>" href="manage_leave_requests.php">
+        <i class="bi bi-calendar-check"></i>Leave Requests
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link <?= ($current_page == 'employee_leaves_report.php') ? 'active' : '' ?>" href="employee_leaves_report.php">
+        <i class="bi bi-calendar-check"></i> Employee Leaves
+    </a>
+</li> -->
+
+
         <li class="nav-item bg-danger mt-5">
             <a class="nav-link text-white" href="logout.php">
                 <i class="bi bi-box-arrow-right"></i> Logout
@@ -118,5 +166,8 @@ body {
         </li>
     </ul>
 </div>
+<!-- Bootstrap JS (required for dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

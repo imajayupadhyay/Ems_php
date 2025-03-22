@@ -18,7 +18,13 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
     <title>Attendance Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/attendance.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .working-days {
+            border-radius: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -27,10 +33,10 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
         <div class="main-content">
             <h2 class="mb-4">Attendance Report</h2>
 
-            <!-- Filters for Employee and Month -->
+            <!-- Filters for Employee, Month & Date -->
             <form id="filterForm" class="mb-3">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="employee">Select Employee:</label>
                         <select name="employee_id" id="employee" class="form-control">
                             <option value="">-- All Employees --</option>
@@ -41,15 +47,30 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="month">Select Month:</label>
                         <input type="month" name="month" id="month" class="form-control">
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
+                    <div class="col-md-3">
+                        <label for="date">Select Date:</label>
+                        <input type="date" name="date" id="date" class="form-control">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">Filter</button>
                     </div>
                 </div>
             </form>
+
+            <!-- Total Working Days Container -->
+            <div class="container m-3 p-3 bg-primary text-white working-days" id="workingDaysContainer" style="display: none;">
+                <h5><strong>Total Working Days:</strong> <span id="totalWorkingDays">0</span></h5>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="mb-3">
+                <button id="exportExcel" class="btn btn-success">Export to Excel</button>
+                <button id="exportPDF" class="btn btn-danger">Export to PDF</button>
+            </div>
 
             <!-- Attendance Table -->
             <div id="attendanceTable">
@@ -57,6 +78,7 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
                 <table class="table table-bordered mt-3">
                     <thead>
                         <tr>
+                            <th>Employee Name</th>
                             <th>Date</th>
                             <th>Punch In</th>
                             <th>Punch Out</th>
@@ -64,7 +86,7 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td colspan="4" class="text-center">Select filters to view attendance.</td></tr>
+                        <tr><td colspan="5" class="text-center">Select filters to view attendance.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -78,18 +100,46 @@ $employees = $conn->query("SELECT id, first_name, last_name FROM employees");
 
                 var employee_id = $("#employee").val();
                 var month = $("#month").val();
+                var date = $("#date").val();
+
+                // Check if a specific date is selected, then ignore the month
+                if (date) {
+                    month = ''; // Reset month filter if date is selected
+                }
 
                 $.ajax({
                     url: "fetch_attendance.php",
                     type: "POST",
-                    data: { employee_id: employee_id, month: month },
+                    data: { employee_id: employee_id, month: month, date: date },
+                    dataType: "json",
                     success: function (response) {
-                        $("#attendanceTable").html(response);
+                        $("#attendanceTable").html(response.attendanceTable);
+                        
+                        if (response.totalWorkingDays !== undefined && employee_id && month) {
+                            $("#totalWorkingDays").text(response.totalWorkingDays);
+                            $("#workingDaysContainer").show();
+                        } else {
+                            $("#workingDaysContainer").hide();
+                        }
                     },
                     error: function (xhr, status, error) {
                         alert("Error: " + xhr.responseText);
                     }
                 });
+            });
+
+            $("#exportExcel").click(function () {
+                var employee_id = $("#employee").val();
+                var month = $("#month").val();
+                var date = $("#date").val();
+                window.location.href = "export_excel.php?employee_id=" + employee_id + "&month=" + month + "&date=" + date;
+            });
+
+            $("#exportPDF").click(function () {
+                var employee_id = $("#employee").val();
+                var month = $("#month").val();
+                var date = $("#date").val();
+                window.location.href = "export_pdf.php?employee_id=" + employee_id + "&month=" + month + "&date=" + date;
             });
         });
     </script>

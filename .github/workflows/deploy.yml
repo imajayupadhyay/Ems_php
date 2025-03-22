@@ -1,0 +1,22 @@
+name: Manual PHP Deployment to Hostinger
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  deploy:
+    name: Upload to Hostinger via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_TARGET }}
+          local-dir: ./  # adjust if your PHP files are in a subfolder

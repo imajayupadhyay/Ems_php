@@ -108,6 +108,12 @@ h1,h2,h3,h4,h5,h6,p,li {
                 <i class="bi bi-geo-alt"></i> Punch In/Out
             </a>
         </li>
+        <li class="nav-item">
+    <a class="nav-link <?= ($current_page == 'apply_leave.php') ? 'active' : '' ?>" href="apply_leave.php">
+        <i class="bi bi-calendar-plus"></i> Apply for Leave
+    </a>
+</li>
+
         <li class="nav-item bg-danger mt-5 ">
             <a class="nav-link text-white" <?= ($current_page == 'logout.php') ? 'active' : '' ?>" href="logout.php">
                 <i class="bi bi-box-arrow-right"></i> Logout
