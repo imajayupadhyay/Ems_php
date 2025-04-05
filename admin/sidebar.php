@@ -106,6 +106,12 @@ body {
             </a>
         </li>
         <li class="nav-item">
+    <a class="nav-link <?= ($current_page == 'view_tasks.php') ? 'active' : '' ?>" href="view_tasks.php">
+        <i class="bi bi-journal-text"></i> View Daily Tasks
+    </a>
+</li>
+
+        <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'designation.php') ? 'active' : '' ?>" href="designation.php">
                 <i class="bi bi-arrow-right-circle"></i> Designations
             </a>
